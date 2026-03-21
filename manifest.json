@@ -1,0 +1,9 @@
+{
+  "name": "VentIQ",
+  "short_name": "VentIQ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eef7f1",
+  "theme_color": "#2f9e63",
+  "icons": []
+}

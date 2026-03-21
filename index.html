@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VentIQ</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --bg: #eef7f1;
+            --panel: #ffffff;
+            --panel-soft: #f4fbf6;
+            --text: #183027;
+            --muted: #557266;
+            --accent: #2f9e63;
+            --accent-dark: #1f7a49;
+            --warning: #d97706;
+            --danger: #c2410c;
+            --good: #2f9e63;
+            --ring: rgba(47, 158, 99, 0.18);
+            --shadow: 0 16px 40px rgba(28, 76, 52, 0.10);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at top left, #f7fff8 0%, transparent 30%),
+                linear-gradient(180deg, #edf8f0 0%, #e6f4ea 100%);
+            color: var(--text);
+        }
+
+        .app {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 28px 0 40px;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .hero-card, .card {
+            background: var(--panel);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            padding: 22px;
+            border: 1px solid rgba(47, 158, 99, 0.10);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #52c785, #2f9e63);
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 12px 24px rgba(47, 158, 99, 0.22);
+        }
+
+        h1, h2, h3, p {
+            margin-top: 0;
+        }
+
+        h1 {
+            margin-bottom: 6px;
+            font-size: 2.3rem;
+        }
+
+        .tagline {
+            color: var(--muted);
+            font-size: 1.02rem;
+            line-height: 1.5;
+            max-width: 720px;
+        }
+
+        .eco-pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .pill {
+            background: var(--panel-soft);
+            color: var(--accent-dark);
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-weight: 600;
+            border: 1px solid rgba(47, 158, 99, 0.12);
+        }
+
+        .hero-stats {
+            display: grid;
+            gap: 14px;
+        }
+
+        .stat {
+            background: linear-gradient(180deg, #f8fffa, #f0fbf4);
+            border-radius: 18px;
+            padding: 18px;
+            border: 1px solid rgba(47, 158, 99, 0.12);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.35fr 0.95fr;
+            gap: 20px;
+        }
+
+        .stack {
+            display: grid;
+            gap: 20px;
+        }
+
+        .status-banner {
+            margin-top: 16px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            background: #f4fbf6;
+            border: 1px solid rgba(47, 158, 99, 0.12);
+            font-weight: 700;
+        }
+
+        .insight-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .insight {
+            padding: 16px;
+            border-radius: 18px;
+            background: var(--panel-soft);
+            border: 1px solid rgba(47, 158, 99, 0.10);
+        }
+
+        .insight small {
+            display: block;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .insight strong {
+            font-size: 1.25rem;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-title p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .controls-note {
+            color: var(--muted);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .field {
+            background: var(--panel-soft);
+            padding: 14px;
+            border-radius: 16px;
+            border: 1px solid rgba(47, 158, 99, 0.10);
+        }
+
+        .field label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .field span {
+            display: block;
+            color: var(--muted);
+            font-size: 0.92rem;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        input {
+            width: 100%;
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(47, 158, 99, 0.18);
+            background: #fff;
+            color: var(--text);
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--ring);
+        }
+
+        button {
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(47, 158, 99, 0.18);
+        }
+
+        button.secondary {
+            background: white;
+            color: var(--accent-dark);
+            border: 1px solid rgba(47, 158, 99, 0.18);
+            box-shadow: none;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .legend-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 14px;
+            border-radius: 16px;
+            background: var(--panel-soft);
+            border: 1px solid rgba(47, 158, 99, 0.10);
+        }
+
+        .legend-icon {
+            min-width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+            background: white;
+        }
+
+        canvas {
+            max-width: 100%;
+            background: #fbfffc;
+            border-radius: 18px;
+            padding: 12px;
+        }
+
+        .footnote {
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.45;
+        }
+
+        .savings-glow {
+            color: var(--accent-dark);
+        }
+
+        @media (max-width: 920px) {
+            .hero, .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .insight-row, .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.9rem;
+            }
+
+            .app {
+                width: min(100% - 20px, 1180px);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <section class="hero">
+        <div class="hero-card">
+            <div class="brand">
+                <div class="logo">🍃</div>
+                <div>
+                    <h1>VentIQ</h1>
+                    <p class="tagline">
+                        Eco-friendly room comfort intelligence that helps you keep the room comfortable,
+                        understand when to open or close a window, and turn every smart adjustment into a visible savings win.
+                    </p>
+                </div>
+            </div>
+
+            <div class="eco-pill-row">
+                <div class="pill">Comfort-first controls</div>
+                <div class="pill">Air-quality awareness</div>
+                <div class="pill">Window action rewards</div>
+            </div>
+
+            <div id="statusBanner" class="status-banner">Waiting for live room data…</div>
+
+            <div class="insight-row">
+                <div class="insight">
+                    <small>Predicted room temp</small>
+                    <strong id="prediction">--</strong>
+                </div>
+                <div class="insight">
+                    <small>Temperature trend</small>
+                    <strong id="trend">--</strong>
+                </div>
+                <div class="insight">
+                    <small>Current state</small>
+                    <strong id="stateText">--</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-label">Eco actions completed</div>
+                <div class="stat-value" id="ecoActions">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Estimated savings</div>
+                <div class="stat-value savings-glow" id="moneySaved">$0.00</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Comfort band</div>
+                <div class="stat-value" id="comfortBand">--°C to --°C</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="grid">
+        <div class="stack">
+            <div class="card">
+                <div class="section-title">
+                    <div>
+                        <h2>Live Temperature Story</h2>
+                        <p>Track indoor and outdoor temperatures to keep the room in a comfortable, efficient range.</p>
+                    </div>
+                </div>
+                <canvas id="tempChart"></canvas>
+                <p class="footnote">VentIQ compares indoor and outdoor conditions so recommendations feel comfort-driven and energy-aware.</p>
+            </div>
+        </div>
+
+        <div class="stack">
+            <div class="card">
+                <div class="section-title">
+                    <div>
+                        <h2>Comfort Controls</h2>
+                        <p>These settings determine the comfortable room temperature range VentIQ uses for recommendations.</p>
+                    </div>
+                </div>
+
+                <p class="controls-note">
+                    Adjust the warm and cool thresholds to define what “comfortable” means for your room. VentIQ uses this band to decide when opening or closing a window can help regulate the space.
+                </p>
+
+                <div class="controls-grid">
+                    <div class="field">
+                        <label for="hot">Upper comfort limit (°C)</label>
+                        <span>If the room is predicted to rise above this, VentIQ may suggest opening a window to cool things down.</span>
+                        <input id="hot" type="number" step="0.1">
+                    </div>
+
+                    <div class="field">
+                        <label for="cold">Lower comfort limit (°C)</label>
+                        <span>If the room is predicted to fall below this, VentIQ may suggest closing windows or keeping warmer air in.</span>
+                        <input id="cold" type="number" step="0.1">
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button onclick="saveSettings()">Save comfort range</button>
+                </div>
+
+                <p class="footnote">A tighter comfort range creates more frequent alerts. A wider range prioritizes fewer interventions and steadier comfort.</p>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <div>
+                        <h2>Sound Legend</h2>
+                        <p>What each sound means and how to interpret the alerts.</p>
+                    </div>
+                </div>
+
+                <div class="legend-list">
+                    <div class="legend-item">
+                        <div class="legend-icon">🔔</div>
+                        <div>
+                            <strong>High beep — 880 Hz</strong>
+                            <p>Window action cue. This means VentIQ recommends regulating temperature by opening a window for airflow or cooling.</p>
+                        </div>
+                    </div>
+
+                    <div class="legend-item">
+                        <div class="legend-icon">🌬️</div>
+                        <div>
+                            <strong>Low beep — 660 Hz</strong>
+                            <p>Air quality cue. This means the room is getting stuffy and needs fresh air attention.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button class="secondary" onclick="testBeep('open_window')">Test high beep</button>
+                    <button class="secondary" onclick="testBeep('air_stuffy')">Test low beep</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+let chart;
+let lastState = null;
+let ecoActions = 0;
+let moneySaved = 0;
+const SAVINGS_PER_REGULATION = 0.35;
+const stateLabels = {
+    open_window: "Open window",
+    air_stuffy: "Air quality alert",
+    good: "Comfortable",
+    unknown: "Checking"
+};
+
+if ("Notification" in window) {
+    Notification.requestPermission();
+}
+
+function createChart(labels, indoor, outdoor) {
+    const ctx = document.getElementById('tempChart');
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                { label: 'Indoor', data: indoor, borderColor: '#2f9e63', tension: 0.3 },
+                { label: 'Outdoor', data: outdoor, borderColor: '#d97706', tension: 0.3 }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: { color: '#183027' }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#557266' },
+                    grid: { color: 'rgba(47, 158, 99, 0.08)' }
+                },
+                y: {
+                    ticks: { color: '#557266' },
+                    grid: { color: 'rgba(47, 158, 99, 0.08)' }
+                }
+            }
+        }
+    });
+}
+
+function testBeep(type) {
+    const audio = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audio.createOscillator();
+    osc.type = "sine";
+    osc.frequency.value = (type === "open_window") ? 880 : 660;
+    osc.connect(audio.destination);
+    osc.start();
+    setTimeout(() => {
+        osc.stop();
+        audio.close();
+    }, 300);
+}
+
+function updateSavingsDisplay() {
+    document.getElementById("ecoActions").innerText = ecoActions;
+    document.getElementById("moneySaved").innerText = "$" + moneySaved.toFixed(2);
+}
+
+function updateComfortBand() {
+    const hot = parseFloat(document.getElementById("hot").value);
+    const cold = parseFloat(document.getElementById("cold").value);
+    if (!Number.isNaN(hot) && !Number.isNaN(cold)) {
+        document.getElementById("comfortBand").innerText = `${cold.toFixed(1)}°C to ${hot.toFixed(1)}°C`;
+    }
+}
+
+async function saveSettings() {
+    await fetch("/settings", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            HOT_TEMP: parseFloat(document.getElementById("hot").value),
+            COLD_TEMP: parseFloat(document.getElementById("cold").value)
+        })
+    });
+    updateComfortBand();
+}
+
+async function loadSettings() {
+    const res = await fetch("/settings");
+    const s = await res.json();
+    document.getElementById("hot").value = s.HOT_TEMP;
+    document.getElementById("cold").value = s.COLD_TEMP;
+    updateComfortBand();
+
+    ecoActions = s.ECO_ACTIONS || 0;
+    moneySaved = s.MONEY_SAVED || 0;
+    updateSavingsDisplay();
+}
+
+function updateStatus(latest, predicted) {
+    let message = "VentIQ is monitoring the room.";
+    if (latest.state === "open_window") {
+        if (predicted > latest.indoor) {
+            message = "Comfort is drifting warm. VentIQ suggests opening a window to cool the room naturally.";
+        } else {
+            message = "Comfort is drifting cool. VentIQ is trying to regulate the room using outdoor air conditions.";
+        }
+    } else if (latest.state === "air_stuffy") {
+        message = "Air quality is getting stuffy. Fresh airflow can improve comfort and room health.";
+    } else if (latest.state === "good") {
+        message = "The room is within a comfortable range and running efficiently.";
+    } else if (latest.state === "unknown") {
+        message = "VentIQ is waiting for enough data to make a recommendation.";
+    }
+
+    document.getElementById("statusBanner").innerText = message;
+}
+
+async function fetchData() {
+    const res = await fetch("/data");
+    const data = await res.json();
+    if (data.length < 1) return;
+
+    const indoor = data.map(d => d.indoor);
+    const outdoor = data.map(d => d.outdoor);
+    const labels = data.map((_, i) => i + 1);
+
+    const latest = data[data.length - 1];
+    const predicted = latest.indoor + latest.trend * 3;
+    document.getElementById("prediction").innerText = predicted.toFixed(1) + " °C";
+
+    let arrow = "→ Stable";
+    if (latest.trend > 0.05) arrow = "↑ Rising";
+    if (latest.trend < -0.05) arrow = "↓ Falling";
+    document.getElementById("trend").innerText = arrow;
+    document.getElementById("stateText").innerText = stateLabels[latest.state] || latest.state;
+    updateStatus(latest, predicted);
+
+    if (lastState !== latest.state) {
+        const regulatingAction = latest.state === "open_window" || (lastState === "open_window" && latest.state === "good");
+        if (regulatingAction) {
+            ecoActions += 1;
+            moneySaved += SAVINGS_PER_REGULATION;
+            updateSavingsDisplay();
+        }
+
+        if (Notification.permission === "granted") {
+            if (latest.state === "open_window") {
+                new Notification("VentIQ: Open Window", {body: "Comfort is moving outside your preferred room temperature range."});
+            }
+            if (latest.state === "air_stuffy") {
+                new Notification("VentIQ: Air Quality Alert", {body: "The low beep means the room needs fresh air."});
+            }
+        }
+        lastState = latest.state;
+    }
+
+    if (!chart) createChart(labels, indoor, outdoor);
+    else {
+        chart.data.labels = labels;
+        chart.data.datasets[0].data = indoor;
+        chart.data.datasets[1].data = outdoor;
+        chart.update();
+    }
+}
+
+loadSettings();
+fetchData();
+setInterval(fetchData, 2000);
+</script>
+</body>
+</html>
