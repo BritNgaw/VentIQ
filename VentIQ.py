@@ -102,36 +102,6 @@ lis3dh = adafruit_lis3dh.LIS3DH_I2C(i2c)
 lis3dh.range = adafruit_lis3dh.RANGE_4_G
 
 # ============================================================
-# PROP-MAKER RGB LED SETUP
-# ============================================================
-# These match the RGB LED outputs used in your original code.
-# If your board wiring differs, update these pins.
-
-red = pwmio.PWMOut(board.D11)
-green = pwmio.PWMOut(board.D12)
-blue = pwmio.PWMOut(board.D13)
-
-def set_color(r, g, b):
-    red.duty_cycle = r
-    green.duty_cycle = g
-    blue.duty_cycle = b
-
-# ============================================================
-# LED ANIMATION
-# ============================================================
-
-def pulse_blue(strength):
-    brightness = int(20000 + strength * 40000)
-
-    for value in range(0, brightness, 1000):
-        set_color(0, 0, value)
-        time.sleep(0.01)
-
-    for value in range(brightness, 0, -1000):
-        set_color(0, 0, value)
-        time.sleep(0.01)
-
-# ============================================================
 # SPEAKER
 # ============================================================
 
@@ -258,14 +228,6 @@ def feedback(state, strength):
     else:
         print("Recommendation: Unknown")
         set_color(40000, 40000, 0)
-
-# ============================================================
-# TAP DETECTION
-# ============================================================
-
-def tap_detected():
-    x, y, z = lis3dh.acceleration
-    return abs(x) > 15 or abs(y) > 15 or abs(z) > 15
 
 # ============================================================
 # DASHBOARD SEND
