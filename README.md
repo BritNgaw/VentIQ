@@ -103,7 +103,7 @@ The device was fabricated using a **Bambu 3D printer** with PLA, iterating on fo
 
 ### Demo Video
 
-<video src="images/final_video.mov" controls width="600"></video>
+<iframe src="https://drive.google.com/file/d/1DyvU9hf2qiud7oeP5ip6Eoall5Shnbk1/preview" width="640" height="480" allow="autoplay"></iframe>
 
 ---
 
