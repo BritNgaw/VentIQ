@@ -67,3 +67,48 @@ Sensor outputs such as humidity, gas-related readings, and temperature trends ar
 2. Replace the Wi-Fi credentials, weather API key, and local server IP with your own values.
 3. Save it as `code.py` on the Feather.
 4. Make sure the required CircuitPython libraries are installed.
+
+## 3D Fabrication
+
+### Physical UI Design
+
+To extend VentIQ beyond the screen, we designed a **wall-mounted physical interface** that communicates room conditions in an ambient, glanceable way. The goal was to create a device that lives naturally within a home environment while continuously reflecting environmental changes.
+
+The enclosure was modeled in CAD with a focus on **airflow, visibility, and integration of internal components**. Special attention was given to the front-facing elements for clear display feedback and access. The design also accounts for internal spacing for the Feather board and sensors, while maintaining a compact and minimal external form.
+
+This approach transforms the system from something users actively check into something they can **passively perceive**, supporting more intuitive interaction with environmental data.
+
+### CAD Design & Slicing
+
+| CAD Design | Slicing Preview |
+|------------|----------------|
+| ![](images/CADDesign.png) | ![](images/3DSlicing.png) |
+
+- CAD design defines internal structure, mounting, and component layout  
+- Slicing process ensures print feasibility and structural integrity  
+
+---
+
+### Fabrication & Final Outcome
+
+The device was fabricated using a **Bambu 3D printer** with PLA, iterating on form, fit, and function. The final result is a compact, minimal enclosure that acts as a **physical extension of the VentIQ system**, enabling users to understand and respond to their environment without needing to open the dashboard.
+
+### Final Device
+
+| Front View | Assembled Model |
+|------------|----------------|
+| ![](images/3DFront.png) | ![](images/VentIQModel.jpg) |
+
+---
+
+### Demo Video
+
+<video src="images/final_video.mov" controls width="600"></video>
+
+---
+
+### Interaction Design Insight
+
+This physical UI shifts VentIQ from a tool into an **ambient system**. Instead of requiring users to open a dashboard, the device provides continuous, low-effort awareness of room conditions and reinforces timely actions such as opening a window for natural ventilation.
+
+By embedding feedback directly into the environment, VentIQ supports more **natural decision-making and sustainable behavior**, bridging the gap between environmental data and real-world action.
