@@ -97,13 +97,13 @@ The device was fabricated using a **Bambu 3D printer** with PLA, iterating on fo
 
 | Front View | Assembled Model |
 |------------|----------------|
-| ![](images/3DFront.png) | ![](images/VentIQModel.jpg) |
+| ![](images/3DFront.png) | <img src="images/VentIQModel.jpg" width="50%"> |
 
 ---
 
 ### Demo Video
 
-<iframe src="https://drive.google.com/file/d/1DyvU9hf2qiud7oeP5ip6Eoall5Shnbk1/preview" width="640" height="480" allow="autoplay"></iframe>
+[![Watch the demo](images/3DFront.png)](https://drive.google.com/file/d/1DyvU9hf2qiud7oeP5ip6Eoall5Shnbk1/view?usp=sharing)
 
 ---
 
