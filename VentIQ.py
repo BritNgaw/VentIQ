@@ -277,7 +277,7 @@ while True:
     # 4. Show readable serial UI
     show_status(indoor_temp, outdoor_temp, humidity, gas, trend, state, CITY)
 
-    # 5. Give user feedback through LEDs and speaker
+    # 5. Give user feedback through speaker
     feedback(state, strength)
 
     # 6. Send to Flask dashboard
@@ -287,11 +287,5 @@ while True:
     last_state = state
     last_strength = strength
 
-    # 8. Replay feedback if tapped
-    if tap_detected():
-        print("Tap detected - replaying recommendation")
-        feedback(last_state, last_strength)
-        time.sleep(2)
-
-    # 9. Wait before next reading
-    time.sleep(30)# Write your code here :-)
+    # 8. Wait before next reading
+    time.sleep(30) 
